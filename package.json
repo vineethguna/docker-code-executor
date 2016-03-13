@@ -2,6 +2,7 @@
   "name": "docker-code-executor",
   "version": "0.0.1",
   "dependencies": {
+    "dockerode": "^2.2.10",
     "express": "^4.13.4"
   },
   "devDependencies": {
