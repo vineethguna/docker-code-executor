@@ -1,10 +1,13 @@
 var fs = require('fs');
+var spwan = require('child_process').spawn;
 var helpers = require('../helpers');
 
 var cExecutor = function(){};
 
-cExecutor.prototype.executeCommand = function(filePath, callback){
-
+cExecutor.prototype.compileAndExecuteCode = function(filePath, callback){
+    if(!helpers.isCommandInPath('gcc')){
+        callback(Error('Gcc is not found in path'));
+    }
 };
 
 cExecutor.prototype.execute = function(filePath, callback){
@@ -16,10 +19,7 @@ cExecutor.prototype.execute = function(filePath, callback){
         callback(Error('The given file path is not valid'));
     }
 
-    if(!helpers.isCommandInPath('gcc')){
-        callback(Error('Gcc is not found in path'));
-    }
-    this.executeCommand(filePath, callback);
+    this.compileAndExecuteCode(filePath, callback);
 };
 
 module.exports = cExecutor;
