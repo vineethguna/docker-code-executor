@@ -1,5 +1,14 @@
 module.exports = {
-    'c': require('./cExecutor'),
-    'python': require('./pythonExecutor'),
-    'ruby': require('./rubyExecutor')
+    'c': {
+        executorModule: require('./cExecutor'),
+        extension: '.c'
+    },
+    'python':{
+        executorModule: require('./pythonExecutor'),
+        extension: '.py'
+    },
+    'ruby': {
+        executorModule: require('./rubyExecutor'),
+        extension: '.rb'
+    }
 };

@@ -1,4 +1,5 @@
 var child_process = require('child_process');
+var _ = require('lodash');
 var format = require('util').format;
 
 var isCommandInPath = function(command){
@@ -7,13 +8,46 @@ var isCommandInPath = function(command){
     }
 
     try {
-        child_process.execSync(format('where %s', command));
+        child_process.execSync(format('which %s', command));
         return true;
     } catch(e) {
         return false;
     }
 };
 
+var executeCommandsInSeries = function(commands, callback){
+    var stdoutData = '', stderrData = '';
+
+    if(commands == undefined || !_.isArray(commands)) {
+        throw Error('Parameters are either undefined or not expected');
+    } else if(!_.isFunction(callback)){
+        throw Error('The callback passed is not a function');
+    }
+    else if(commands.length == 0) {
+        throw Error('No commands given');
+    }
+
+    //TODO: The below code should be tested
+    var series = function(commands, callback){
+        if(commands.length == 0){
+            callback(null, stderrData, stdoutData);
+        } else {
+            var command = commands.shift();
+            child_process.exec(command, {timeout: 5000}, function(error, stdout, stderr){    //TODO: Switch timeout to a config file
+                stderrData += stderr || '';
+                stdoutData += stdout || '';
+                if(error){
+                    callback(error, stderrData);
+                } else {
+                    series(commands, callback);
+                }
+            });
+        }
+    };
+    series(commands, callback);
+};
+
 module.exports = {
-    isCommandInPath: isCommandInPath
+    isCommandInPath: isCommandInPath,
+    executeCommandsInSeries: executeCommandsInSeries
 };

@@ -2,10 +2,16 @@ var _ = require('lodash');
 var format = require('util').format;
 var executorMapper = require('../../../../modules/codeexecutors/executorMapper');
 
-describe('Testing modules/codeexecutors/executorMapper.js', function(){
-    var validLanguages;
+describe('modules/codeexecutors/executorMapper.js', function(){
+    var validLanguages, languageExtensionMap;
 
     beforeAll(function(){
+        languageExtensionMap = {
+            'c': '.c',
+            'python': '.py',
+            'ruby': '.rb'
+        };
+
         validLanguages = ['c', 'python', 'ruby'];
     });
 
@@ -21,8 +27,13 @@ describe('Testing modules/codeexecutors/executorMapper.js', function(){
 
     it('should contain a mapper from language to respective language executor class', function(){
         _.forEach(executorMapper, function(value, key){
-            expect(value).toBe(require(format('../../../../modules/codeexecutors/%sExecutor', key)));
+            expect(value.executorModule).toBe(require(format('../../../../modules/codeexecutors/%sExecutor', key)));
         });
-
     });
+
+    it('should have the respective extensions', function(){
+        _.forEach(languageExtensionMap, function(value, key){
+            expect(executorMapper[key].extension).toBe(value);
+        })
+    })
 });

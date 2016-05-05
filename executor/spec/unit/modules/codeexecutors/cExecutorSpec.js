@@ -1,16 +1,15 @@
 var cExecutor = require('../../../../modules/codeexecutors/cExecutor');
 var helpers = require('../../../../modules/helpers');
 var fs = require('fs');
-var child_process = require('child_process');
 
-describe('Testing modules/codeexecutors/cExecutor.js', function(){
-    describe('Testing cExecutor prototype', function(){
+describe('modules/codeexecutors/cExecutor.js', function(){
+    describe('cExecutor prototype', function(){
         it('should have execute method', function(){
             var cExecutorObj = new cExecutor();
             expect(typeof cExecutorObj.execute).toBe('function');
         });
 
-        describe('Testing execute method of prototype', function(){
+        describe('execute method of prototype', function(){
             var fileExistsPath, fileNotExistsPath, cExecutorObj, validCallback;
             beforeAll(function(){
                 fileExistsPath = '/sample/exists';
@@ -49,15 +48,6 @@ describe('Testing modules/codeexecutors/cExecutor.js', function(){
                 expect(validCallback.calls.argsFor(0)).toEqual([Error('The given file path is not valid')]);
             });
 
-            it('should throw error if callback passed is not undefined and is not a function', function(){
-                expect(function(){cExecutorObj.execute(fileExistsPath, 1)}).toThrowError(Error,
-                    'The callback passed is not a function');
-                expect(function(){cExecutorObj.execute(fileExistsPath, 'sample')}).toThrowError(Error,
-                    'The callback passed is not a function');
-                expect(function(){cExecutorObj.execute(fileExistsPath, {})}).toThrowError(Error,
-                    'The callback passed is not a function');
-            });
-
             it('should not throw error if the passed parameters are valid', function(){
                 expect(function(){cExecutorObj.execute(fileExistsPath, validCallback)}).not.toThrowError();
             });
@@ -69,12 +59,14 @@ describe('Testing modules/codeexecutors/cExecutor.js', function(){
             });
         });
         
-        describe('Testing compileAndExecuteCode function', function(){
+        describe('compileAndExecuteCode function', function(){
             var cExecutorObj, validCallback;
+
             beforeEach(function(){
                 cExecutorObj = new cExecutor();
                 validCallback = jasmine.createSpy('validCallback');
                 spyOn(helpers, 'isCommandInPath').and.returnValue(true);
+                spyOn(helpers, 'executeCommandsInSeries').and.returnValue(null);
             });
 
             it('should call isCommandInPath function', function(){
@@ -90,20 +82,19 @@ describe('Testing modules/codeexecutors/cExecutor.js', function(){
                 expect(validCallback.calls.argsFor(0)).toEqual([Error('Gcc is not found in path')]);
             });
 
-            it('should call spawn to execute the command to compile', function(){
-                
-            });
+            it('should call executeCommandInSeries to execute the command to compile', function(){
+                cExecutorObj.compileAndExecuteCode('/home/test1.c', validCallback);
+                expect(helpers.executeCommandsInSeries).toHaveBeenCalled();
+                expect(helpers.executeCommandsInSeries.calls.argsFor(0)).toEqual([['gcc -o /home/test1 /home/test1.c',
+                    '/home/test1', 'rm -f /home/test1'], validCallback]);
 
-            it('should call callback with error if command execution fails', function(){
+                helpers.executeCommandsInSeries.calls.reset();
 
-            });
-
-            it('should call callback with error if command execution exceeds timeout', function(){
-
-            });
-
-            it('should call callback with the output if command execution succeeds', function(){
-
+                cExecutorObj.compileAndExecuteCode('/home/abc/def/test1.c', validCallback);
+                expect(helpers.executeCommandsInSeries).toHaveBeenCalled();
+                expect(helpers.executeCommandsInSeries.calls.argsFor(0)).
+                toEqual([['gcc -o /home/abc/def/test1 /home/abc/def/test1.c', '/home/abc/def/test1',
+                    'rm -f /home/abc/def/test1'], validCallback]);
             });
         });
     });

@@ -2,8 +2,8 @@ var helpers = require('../../../routes/helpers');
 var _ = require('lodash');
 var format = require('util').format;
 
-describe('Testing routes/helpers.js', function(){
-    describe('Testing initializeRoutes function', function(){
+describe('routes/helpers.js', function(){
+    describe('initializeRoutes function', function(){
         var specs, app;
 
         beforeAll(function(){
