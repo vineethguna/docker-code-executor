@@ -1,5 +1,5 @@
 module.exports = {
     '/execute': {
-        routeModule: require('./execute')
+        routeModule: require('./../execute')
     }
 };

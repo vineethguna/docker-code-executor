@@ -1,4 +1,4 @@
-var helpers = require('../../../routes/helpers');
+var helpers = require('../../../../routes/utils/helpers');
 var _ = require('lodash');
 var format = require('util').format;
 

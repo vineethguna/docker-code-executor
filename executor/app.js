@@ -4,8 +4,8 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var specs = require('./routes/specs');
-var initializeRoutes = require('./routes/helpers').initializeRoutes;
+var specs = require('./routes/utils/specs');
+var initializeRoutes = require('./routes/utils/helpers').initializeRoutes;
 
 var app = express();
 
