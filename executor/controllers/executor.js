@@ -3,6 +3,7 @@ var async = require('async');
 var tmp = require('tmp');
 var fs = require('fs');
 var executorMapper = require('../modules/codeexecutors/executorMapper');
+var config = require('../config');
 
 // Private functions
 var isValidLanguage = function(language){
@@ -51,7 +52,7 @@ executor.prototype.execute = function(code, callback){
         var self = this;
         async.waterfall([
             function(asyncCallback){
-                tmp.file({keep: true, dir: '/home/sguna/myprojects/docker-code-executor/executor/tmp',  //TODO: move this to config
+                tmp.file({keep: true, dir: config.tmpDir,
                     postfix: executorMapper[self.language]['extension']}, function(err, path, fd, cleanup){
                     if(err){
                         asyncCallback(err);

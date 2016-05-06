@@ -1,6 +1,7 @@
 var child_process = require('child_process');
 var _ = require('lodash');
 var format = require('util').format;
+var config = require('../config');
 
 var isCommandInPath = function(command){
     if(command == undefined){
@@ -33,7 +34,7 @@ var executeCommandsInSeries = function(commands, callback){
             callback(null, stderrData, stdoutData);
         } else {
             var command = commands.shift();
-            child_process.exec(command, {timeout: 5000}, function(error, stdout, stderr){    //TODO: Switch timeout to a config file
+            child_process.exec(command, {timeout: config.timeout}, function(error, stdout, stderr){
                 stderrData += stderr || '';
                 stdoutData += stdout || '';
                 if(error){
