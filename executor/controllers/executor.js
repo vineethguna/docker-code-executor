@@ -2,6 +2,7 @@ var _ = require('lodash');
 var async = require('async');
 var tmp = require('tmp');
 var fs = require('fs');
+var stripFilePathFromMessage = require('../modules/helpers').stripFilePathFromMessage;
 var executorMapper = require('../modules/codeexecutors/executorMapper');
 var config = require('../config');
 
@@ -84,6 +85,14 @@ executor.prototype.execute = function(code, callback){
 
             function(fileDetails, asyncCallback){
                 executorObj.execute(fileDetails.path, function(err, stderr, stdout){
+                    if(err){
+                        if(err.signal == 'SIGTERM'){
+                            err = new Error('Timeout Exceeded');
+                        }
+                        err.message = stripFilePathFromMessage(fileDetails.path, err.message);
+                    }
+                    stderr = stripFilePathFromMessage(fileDetails.path, stderr);
+                    stdout = stripFilePathFromMessage(fileDetails.path, stdout);
                     asyncCallback(err, stderr, stdout);
                     fileDetails.cleanup();
                 });

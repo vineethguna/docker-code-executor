@@ -48,7 +48,15 @@ var executeCommandsInSeries = function(commands, callback){
     series(commands, callback);
 };
 
+var stripFilePathFromMessage = function(filePath, message){
+    if(filePath && message){
+        return message.replace(new RegExp(filePath, 'g'), '');
+    }
+    return message;
+};
+
 module.exports = {
     isCommandInPath: isCommandInPath,
-    executeCommandsInSeries: executeCommandsInSeries
+    executeCommandsInSeries: executeCommandsInSeries,
+    stripFilePathFromMessage: stripFilePathFromMessage
 };

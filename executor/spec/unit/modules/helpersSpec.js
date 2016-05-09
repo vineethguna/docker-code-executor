@@ -78,4 +78,33 @@ describe('modules/helpers.js', function(){
         
         //TODO: Need to add test cases for closure
     });
+    
+    describe('stripFilePathFromMessage', function(){
+        it('should take two parameters', function(){
+            expect(helpers.stripFilePathFromMessage.length).toBe(2);
+        });
+
+        it('should return true for syntax error in python', function(){
+            var message = "/home/sguna/myprojects/docker-code-executor/executor/tmp/tmp-22195hLha45GJzxh7.c:1:1: warning:" +
+                " data definition has no type or storage class [enabled by default]\n parents, babies = 1, 1)\n" +
+                " ^\n/home/sguna/myprojects/docker-code-executor/executor/tmp/tmp-22195hLha45GJzxh7.c:1:22: error: " +
+                "expected identifier or ‘(’ before numeric constant\n parents, babies = 1, 1)\n" +
+                "                      ^\n/home/sguna/myprojects/docker-code-executor/executor/tmp/tmp-22195hLha45GJzxh7" +
+                ".c:3:11: warning: character constant too long for its type [enabled by default]" +
+                "\n     print 'This generation has {0} babies'.format(babies)\n           ^\n";
+            var expectedMessage = ":1:1: warning:" +
+                " data definition has no type or storage class [enabled by default]\n parents, babies = 1, 1)\n" +
+                " ^\n:1:22: error: " +
+                "expected identifier or ‘(’ before numeric constant\n parents, babies = 1, 1)\n" +
+                "                      ^\n" +
+                ":3:11: warning: character constant too long for its type [enabled by default]" +
+                "\n     print 'This generation has {0} babies'.format(babies)\n           ^\n";
+
+            expect(helpers.stripFilePathFromMessage(
+                '/home/sguna/myprojects/docker-code-executor/executor/tmp/tmp-22195hLha45GJzxh7.c', message)).toEqual(
+                expectedMessage);
+        });
+
+        
+    })
 });
