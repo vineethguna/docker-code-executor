@@ -85,16 +85,15 @@ describe('modules/codeexecutors/cExecutor.js', function(){
             it('should call executeCommandInSeries to execute the command to compile', function(){
                 cExecutorObj.compileAndExecuteCode('/home/test1.c', validCallback);
                 expect(helpers.executeCommandsInSeries).toHaveBeenCalled();
-                expect(helpers.executeCommandsInSeries.calls.argsFor(0)).toEqual([['gcc -o /home/test1 /home/test1.c',
-                    '/home/test1', 'rm -f /home/test1'], validCallback]);
+                expect(helpers.executeCommandsInSeries.calls.argsFor(0)[0]).toEqual(['gcc -o /home/test1 /home/test1.c',
+                    '/home/test1']);
 
                 helpers.executeCommandsInSeries.calls.reset();
 
                 cExecutorObj.compileAndExecuteCode('/home/abc/def/test1.c', validCallback);
                 expect(helpers.executeCommandsInSeries).toHaveBeenCalled();
-                expect(helpers.executeCommandsInSeries.calls.argsFor(0)).
-                toEqual([['gcc -o /home/abc/def/test1 /home/abc/def/test1.c', '/home/abc/def/test1',
-                    'rm -f /home/abc/def/test1'], validCallback]);
+                expect(helpers.executeCommandsInSeries.calls.argsFor(0)[0]).
+                toEqual(['gcc -o /home/abc/def/test1 /home/abc/def/test1.c', '/home/abc/def/test1']);
             });
         });
     });

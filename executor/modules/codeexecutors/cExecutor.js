@@ -14,9 +14,16 @@ cExecutor.prototype.compileAndExecuteCode = function(filePath, callback){
     var compileCommand = format('gcc -o %s %s', path.join(path.dirname(filePath), path.basename(filePath, '.c')),
         filePath);
     var executeCompiledFileCommand = path.join(path.dirname(filePath), path.basename(filePath, '.c'));
-    var deleteCompiledFileCommand = format('rm -f %s', executeCompiledFileCommand);
-
-    helpers.executeCommandsInSeries([compileCommand, executeCompiledFileCommand, deleteCompiledFileCommand], callback);
+    
+    // TODO: Unit Testing function containing callback function
+    helpers.executeCommandsInSeries([compileCommand, executeCompiledFileCommand],
+        function(err, stderr, stdout){
+            fs.unlink(executeCompiledFileCommand, function(err){
+                if(err && err.code == 'ENOENT') { console.log('File not found. So Skipping Delete'); }
+            });
+            callback(err, stderr, stdout);
+        }
+    );
 };
 
 cExecutor.prototype.execute = function(filePath, callback){

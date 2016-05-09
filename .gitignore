@@ -2,3 +2,4 @@ node_modules/
 .idea/
 executor/node_modules/
 executor/tmp/
+executor/npm-debug.log
