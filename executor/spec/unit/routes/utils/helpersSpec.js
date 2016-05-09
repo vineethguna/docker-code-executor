@@ -1,9 +1,9 @@
-var helpers = require('../../../routes/helpers');
+var helpers = require('../../../../routes/utils/helpers');
 var _ = require('lodash');
 var format = require('util').format;
 
-describe('Testing routes/helpers.js', function(){
-    describe('Testing initializeRoutes function', function(){
+describe('routes/helpers.js', function(){
+    describe('initializeRoutes function', function(){
         var specs, app;
 
         beforeAll(function(){
@@ -26,14 +26,8 @@ describe('Testing routes/helpers.js', function(){
             expect(helpers.initializeRoutes).toEqual(jasmine.any(Function));
         });
 
-        it('should take three parameters', function(){
-            spyOn(helpers, 'initializeRoutes');
-            helpers.initializeRoutes(app, 'v1', specs);
-            expect(helpers.initializeRoutes.calls.argsFor(0).length).toEqual(3);
-            helpers.initializeRoutes.calls.reset();
-        });
-
-        it('should throw an error if any of the parameters is undefined', function(){
+        it('should throw an error if it is not passed with suitable parameters', function(){
+            expect(function(){helpers.initializeRoutes()}).toThrowError(Error, 'Few parameters are undefined');
             expect(function(){helpers.initializeRoutes(app)}).toThrowError(Error, 'Few parameters are undefined');
             expect(function(){helpers.initializeRoutes(app, 'v1')}).toThrowError(Error, 'Few parameters are undefined');
             expect(function(){helpers.initializeRoutes(app, 'v1', specs)})

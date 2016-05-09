@@ -1,9 +1,8 @@
 var express = require('express');
+var routeController = require('./controllers/executor');
 
 var router = express.Router();
 
-router.get('/', function(req, res, next){
-    res.json({msg: 'hello world'});
-});
+router.post('/', routeController['/'].post);
 
 module.exports = router;

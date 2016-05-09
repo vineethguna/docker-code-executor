@@ -1,8 +1,8 @@
 var _ = require('lodash');
-var specs = require('../../../routes/specs');
+var specs = require('../../../../routes/utils/routeMapper');
 
 
-describe('Testing routes/specs.js', function(){
+describe('routes/specs.js', function(){
     describe('Validating route specs data', function(){
 
         it('should have valid routes', function(){
