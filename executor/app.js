@@ -3,9 +3,20 @@ var path = require('path');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var fs = require('fs');
 
 var specs = require('./routes/utils/routeMapper');
 var initializeRoutes = require('./routes/utils/helpers').initializeRoutes;
+var config = require('./config');
+
+// create temporary directory
+fs.mkdir(config.tmpDir, function(err) {
+  if(err && err.code == 'EEXIST') {
+    console.log('Temporary Directory already exists, so not creating one');
+  } else {
+    console.log('Created Temporary directory');
+  }
+});
 
 var app = express();
 
