@@ -1,5 +1,5 @@
 var _ = require('lodash');
-var specs = require('../../../../routes/utils/specs');
+var specs = require('../../../../routes/utils/routeMapper');
 
 
 describe('routes/specs.js', function(){
