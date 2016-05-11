@@ -4,6 +4,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var fs = require('fs');
+var cors = require('cors');
 
 var specs = require('./routes/utils/routeMapper');
 var initializeRoutes = require('./routes/utils/helpers').initializeRoutes;
@@ -26,6 +27,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(cors());
 
 // initialize routes
 initializeRoutes(app, 'v1', specs);
