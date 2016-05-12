@@ -7,6 +7,7 @@ going down.
 It is powered by [kubernetes](http://kubernetes.io/), a container cluster manager by Google.
 
 Currently it supports the below languages
+
 * C
 * Python
 * Ruby
@@ -14,15 +15,18 @@ Currently it supports the below languages
 Installation
 ============
 This includes two micro services
+
 * UI
 * Execution Server
 
 First you need to setup the execution server, Please follow the below steps
+
 * Go to `executor` folder
 * Run `npm install` - This is a one time step
 * Start the server using `npm start`
 
 Then you need to start the UI service, Please follow the below steps
+
 * Go to `ui` folder
 * Run `npm install` - This is a one time step
 * Set the following environment variables
