@@ -1,3 +1,8 @@
-FROM httpd:2.4
-COPY . /usr/local/apache2/htdocs/
-RUN chmod -R 755 /usr/local/apache2/htdocs/
+FROM node:4.4.4
+RUN mkdir -p /srv/executor-ui
+WORKDIR /srv/executor-ui
+COPY . /srv/executor-ui/
+RUN npm install
+EXPOSE 8080
+
+CMD ["npm", "start"]
