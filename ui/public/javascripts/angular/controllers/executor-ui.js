@@ -21,7 +21,7 @@ angular.module('executor-ui.controllers').
 
             var reqParams = {
                 method: 'POST',
-                url: 'http://localhost:3000/api/v1/execute',
+                url: '/execute',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                     'Access-Control-Allow-Origin': '*'
@@ -37,8 +37,7 @@ angular.module('executor-ui.controllers').
                 data: {
                     code: code,
                     language: language
-                },
-                crossDomain: true
+                }
             };
 
             $http(reqParams).then(function(response){
