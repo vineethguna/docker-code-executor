@@ -11,21 +11,29 @@ angular.module('executor-ui.controllers').
             
         };
 
+        var setEditorHeight = function(){
+            var editorHeight = window.innerHeight / 2;
+            document.getElementById('code-editor').style.height = editorHeight + 'px';
+            $scope.editor.setSize(null, editorHeight);
+            $scope.editor.refresh();
+        };
+
         $scope.editorOptions = {
             lineNumbers: true,
             theme: 'dracula'
         };
 
         $scope.codemirrorLoaded = function(editor){
-            var editorHeight = window.innerHeight / 2;
-            document.getElementById('code-editor').style.height = editorHeight + 'px';
-            editor.setSize(null, editorHeight);
+            $scope.editor = editor;
+            setEditorHeight();
         };
 
         $scope.setMode = function(){
-            $scope.editorOptions.mode = $scope.language;
-            shareData.setLanguage($scope.language);
-            setDefaultCode();
+            if($scope.editor){
+                $scope.editor.setOption('mode', $scope.language);
+                shareData.setLanguage($scope.language);
+                setDefaultCode();
+            }
         };
 
         $scope.executeCode = function(){
@@ -82,7 +90,7 @@ angular.module('executor-ui.controllers').
         setDefaultLanguage();
         $scope.code = shareData.getCode();
 
-        $scope.setMode();
+        $scope.editor = null;
     }
 ]).
 controller('outputCtrl', ['$scope', 'shareData',
@@ -93,14 +101,21 @@ controller('outputCtrl', ['$scope', 'shareData',
             readOnly: 'nocursor'
         };
 
-        $scope.codemirrorLoaded = function(editor){
+        var setEditorHeight = function(){
             var editorHeight = window.innerHeight / 3;
             document.getElementById('output-editor').style.height = editorHeight + 'px';
-            editor.setSize(null, editorHeight + 'px');
+            $scope.editor.setSize(null, editorHeight + 'px');
+            $scope.editor.refresh();
+        };
+
+        $scope.codemirrorLoaded = function(editor){
+            $scope.editor = editor;
+            setEditorHeight();
         };
         
         $scope.language = shareData.getLanguage();
         $scope.output = shareData.getOutput();
         $scope.isError = shareData.getErrorStatus();
+        $scope.editor = null;
     }
 ]);
