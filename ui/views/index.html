@@ -3,61 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <title>Code Executor</title>
-    <link rel="stylesheet" type="text/css" href="../public/bower_components/codemirror/lib/codemirror.css">
-    <link rel="stylesheet" href="../public/bower_components/codemirror/theme/dracula.css">
-    <link rel="stylesheet" href="../public/stylesheets/index.css">
-    <link rel="stylesheet" href="../public/stylesheets/material.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" type="text/css" href="/bower_components/codemirror/lib/codemirror.css">
+    <link rel="stylesheet" href="/bower_components/codemirror/theme/dracula.css">
+    <link rel="stylesheet" href="/stylesheets/index.css">
+    <link rel="stylesheet" href="/stylesheets/material.min.css">
+    <link rel="stylesheet" href="/stylesheets/material-icons.css">
 </head>
 <body>
-<div ng-controller="rootCtrl" class="container">
+<div>
     <header class="mdl-layout__header">
         <div class="mdl-layout__header-row">
             <span class="mdl-layout__title">Docker Code Executor</span>
         </div>
     </header>
     <div class="container">
-        <div class="mdl-grid">
-            <div class="mdl-cell mdl-cell--2-col">
-                <div class="mdl-cell mdl-cell--3-offset mdl-cell--6-col center-div">
-                    <select class="mdl-textfield__input" ng-model="language" ng-change="setMode()">
-                        <option value="clike">C</option>
-                        <option value="python">Python</option>
-                        <option value="ruby">Ruby</option>
-                    </select>
-                </div>
-            </div>
-            <div class="mdl-cell mdl-cell--8-col">
-                <div id="code-editor">
-                    <ui-codemirror ng-model="code" ui-codemirror-opts="editorOptions"></ui-codemirror>
-                </div>
-            </div>
-            <div class="mdl-cell mdl-cell--2-col">
-                <div class="mdl-cell mdl-cell--3-offset mdl-cell--6-col center-div">
-                    <div id="execute-button" ng-click="executeCode()"
-                         class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
-                        <i class="material-icons">play_arrow</i>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div ng-show="isError">{{errorMsg}}</div>
-        <div ng-hide="isError">{{output}}</div>
+        <div ng-view></div>
     </div>
     <footer class="mdl-mini-footer">
         <div id="footer-text">
-            vsefsegsrg
+            <p>Powered by Kubernetes</p>
         </div>
     </footer>
 </div>
-<script src="../public/bower_components/codemirror/lib/codemirror.js"></script>
-<script src="../public/bower_components/codemirror/mode/clike/clike.js"></script>
-<script src="../public/bower_components/codemirror/mode/python/python.js"></script>
-<script src="../public/bower_components/codemirror/mode/ruby/ruby.js"></script>
-<script src="../public/javascripts/material.min.js"></script>
-<script src="../public/bower_components/angular/angular.min.js"></script>
-<script type="text/javascript" src="../public/bower_components/angular-ui-codemirror/ui-codemirror.js"></script>
-<script src="../public/javascripts/angular/app.js"></script>
-<script src="../public/javascripts/angular/controllers/executor-ui.js"></script>
+<script src="/bower_components/codemirror/lib/codemirror.js"></script>
+<script src="/bower_components/codemirror/mode/clike/clike.js"></script>
+<script src="/bower_components/codemirror/mode/python/python.js"></script>
+<script src="/bower_components/codemirror/mode/ruby/ruby.js"></script>
+<script src="/javascripts/material.min.js"></script>
+<script src="/bower_components/angular/angular.min.js"></script>
+<script src="/bower_components/angular-route/angular-route.min.js"></script>
+<script type="text/javascript" src="/bower_components/angular-ui-codemirror/ui-codemirror.js"></script>
+<script src="/javascripts/angular/app.js"></script>
+<script src="/javascripts/angular/services/executor-ui.js"></script>
+<script src="/javascripts/angular/controllers/executor-ui.js"></script>
 </body>
 </html>

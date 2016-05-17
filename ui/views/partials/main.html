@@ -1,0 +1,25 @@
+<div class="mdl-grid">
+    <div class="mdl-cell mdl-cell--2-col">
+        <div class="mdl-cell mdl-cell--3-offset mdl-cell--6-col center-div">
+            <select class="mdl-textfield__input" ng-model="language" ng-change="setMode()">
+                <option value="clike">C</option>
+                <option value="python">Python</option>
+                <option value="ruby">Ruby</option>
+            </select>
+        </div>
+    </div>
+    <div class="mdl-cell mdl-cell--8-col">
+        <div id="code-editor" class="shadow-effect">
+            <ui-codemirror ui-codemirror="{ onLoad : codemirrorLoaded }"
+                           ng-model="code" ui-codemirror-opts="editorOptions"></ui-codemirror>
+        </div>
+    </div>
+    <div class="mdl-cell mdl-cell--2-col">
+        <div class="mdl-cell mdl-cell--3-offset mdl-cell--6-col center-div">
+            <div id="execute-button" ng-click="executeCode()"
+                 class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
+                <i class="material-icons">play_arrow</i>
+            </div>
+        </div>
+    </div>
+</div>

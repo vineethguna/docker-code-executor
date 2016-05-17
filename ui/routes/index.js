@@ -6,7 +6,15 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    res.render('index', { title: 'Express' });
+    res.render('index.html');
+});
+
+router.get('/partials/:filename', function(req, res){
+    var filename = req.params.filename;
+    if(!filename) {
+        return res.status(404).end();
+    }
+    res.render(format('partials/%s', filename));
 });
 
 router.post('/execute', function(req, res, next){

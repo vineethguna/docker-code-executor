@@ -1,12 +1,10 @@
-#code-editor {
+.shadow-effect {
     border: 1px;
-    height: 50vh;
     box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
 }
 
 .CodeMirror {
     border: 1px solid #eee;
-    height: 50vh;
 }
 
 .center-div {
@@ -34,4 +32,17 @@ footer {
 #footer-text {
     width: inherit;
     text-align: center;
+}
+
+#back-button {
+    min-width: 48px;
+    min-height: 48px;
+}
+
+#check-button {
+    color: green;
+}
+
+#close-button {
+    color: red;
 }
