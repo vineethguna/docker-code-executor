@@ -7,10 +7,6 @@ angular.module('executor-ui.controllers').
             }
         };
 
-        var setDefaultCode = function(){
-            
-        };
-
         var setEditorHeight = function(){
             var editorHeight = window.innerHeight / 2;
             document.getElementById('code-editor').style.height = editorHeight + 'px';
@@ -26,13 +22,13 @@ angular.module('executor-ui.controllers').
         $scope.codemirrorLoaded = function(editor){
             $scope.editor = editor;
             setEditorHeight();
+            $scope.setMode();
         };
 
         $scope.setMode = function(){
             if($scope.editor){
                 $scope.editor.setOption('mode', $scope.language);
                 shareData.setLanguage($scope.language);
-                setDefaultCode();
             }
         };
 
@@ -87,9 +83,7 @@ angular.module('executor-ui.controllers').
         setDefaultLanguage();
         $scope.language = shareData.getLanguage();
 
-        setDefaultLanguage();
         $scope.code = shareData.getCode();
-
         $scope.editor = null;
     }
 ]).
