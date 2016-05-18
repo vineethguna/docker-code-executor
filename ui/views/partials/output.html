@@ -1,0 +1,27 @@
+<div class="mdl-grid">
+    <div class="mdl-cell mdl-cell--2-col">
+        <div>
+            <a href="#/">
+                <button class="mdl-button mdl-js-button mdl-button--icon">
+                    <i class="material-icons">arrow_back</i>
+                </button>
+            </a>
+        </div>
+    </div>
+    <div class="mdl-cell mdl-cell--8-col" style="text-align: center">
+        <div ng-show="isError">
+            <i id="close-button" class="material-icons md-48">close</i>
+        </div>
+        <div ng-hide="isError">
+            <i id="check-button" class="material-icons md-48">check</i>
+        </div>
+    </div>
+</div>
+<div class="mdl-grid">
+    <div class="mdl-cell mdl-cell--2-offset mdl-cell--8-col">
+        <div id="output-editor" class="shadow-effect">
+            <ui-codemirror ui-codemirror="{ onLoad : codemirrorLoaded }"
+                           ng-model="output" ui-codemirror-opts="editorOptions"></ui-codemirror>
+        </div>
+    </div>
+</div>

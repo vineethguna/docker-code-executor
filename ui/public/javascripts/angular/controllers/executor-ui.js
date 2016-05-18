@@ -1,17 +1,41 @@
 angular.module('executor-ui.controllers').
-    controller('rootCtrl', ['$scope', '$http',
-    function($scope, $http){
+    controller('mainCtrl', ['$scope', '$http', '$location', 'shareData',
+    function($scope, $http, $location, shareData){
+        var setDefaultLanguage = function(){
+            if(!shareData.getLanguage()){
+                shareData.setLanguage('clike');
+            }
+        };
+
+        var setEditorHeight = function(){
+            var editorHeight = window.innerHeight / 2;
+            document.getElementById('code-editor').style.height = editorHeight + 'px';
+            $scope.editor.setSize(null, editorHeight);
+            $scope.editor.refresh();
+        };
+
         $scope.editorOptions = {
             lineNumbers: true,
             theme: 'dracula'
         };
 
+        $scope.codemirrorLoaded = function(editor){
+            $scope.editor = editor;
+            setEditorHeight();
+            $scope.setMode();
+        };
+
         $scope.setMode = function(){
-            $scope.editorOptions.mode = $scope.language;
+            if($scope.editor){
+                $scope.editor.setOption('mode', $scope.language);
+                shareData.setLanguage($scope.language);
+            }
         };
 
         $scope.executeCode = function(){
             var code = $scope.code;
+            shareData.setCode($scope.code);
+
             var language;
             if($scope.language == 'clike') {
                 language = 'c'
@@ -42,25 +66,50 @@ angular.module('executor-ui.controllers').
 
             $http(reqParams).then(function(response){
                 if(response.data.error){
-                    $scope.isError = true;
-                    $scope.errorMsg = response.data.errorMsg;
+                    shareData.setErrorStatus(true);
+                    shareData.setOutput(response.data.errorMsg);
                 } else {
-                    $scope.isError = false;
-                    $scope.output = response.data.output;
+                    shareData.setErrorStatus(false);
+                    shareData.setOutput(response.data.output);
                 }
-                $scope.$watch();
+                $location.path('/output');
             }, function(response){
-                $scope.isError = true;
-                $scope.errorMsg = 'Error occured while communuicating with server';
-                $scope.$watch();
+                shareData.setErrorStatus(true);
+                shareData.setOutput('Error occured while communuicating with server');
+                $location.path('/output');
             });
         };
 
-        $scope.language = 'clike';
-        $scope.code = null;
-        $scope.isError = false;
-        $scope.errorMsg = null;
-        $scope.output = null;
-        $scope.setMode();
+        setDefaultLanguage();
+        $scope.language = shareData.getLanguage();
+
+        $scope.code = shareData.getCode();
+        $scope.editor = null;
+    }
+]).
+controller('outputCtrl', ['$scope', 'shareData',
+    function($scope, shareData){
+        $scope.editorOptions = {
+            lineNumbers: false,
+            theme: 'dracula',
+            readOnly: 'nocursor'
+        };
+
+        var setEditorHeight = function(){
+            var editorHeight = window.innerHeight / 3;
+            document.getElementById('output-editor').style.height = editorHeight + 'px';
+            $scope.editor.setSize(null, editorHeight + 'px');
+            $scope.editor.refresh();
+        };
+
+        $scope.codemirrorLoaded = function(editor){
+            $scope.editor = editor;
+            setEditorHeight();
+        };
+        
+        $scope.language = shareData.getLanguage();
+        $scope.output = shareData.getOutput();
+        $scope.isError = shareData.getErrorStatus();
+        $scope.editor = null;
     }
 ]);

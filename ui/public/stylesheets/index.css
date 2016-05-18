@@ -1,7 +1,48 @@
-#code-editor {
+.shadow-effect {
     border: 1px;
+    box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
 }
 
-#header {
+.CodeMirror {
+    border: 1px solid #eee;
+}
+
+.center-div {
+    position: relative;
+    top: 25vh;
+}
+
+.center {
     text-align: center;
+}
+
+/* Remove focus */
+select:focus {
+    outline: none;
+}
+
+footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    height: 20px;
+    width: 100%;
+}
+
+#footer-text {
+    width: inherit;
+    text-align: center;
+}
+
+#back-button {
+    min-width: 48px;
+    min-height: 48px;
+}
+
+#check-button {
+    color: green;
+}
+
+#close-button {
+    color: red;
 }
