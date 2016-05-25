@@ -33,6 +33,8 @@ angular.module('executor-ui.controllers').
         };
 
         $scope.executeCode = function(){
+            $scope.loading.show = true;
+
             var code = $scope.code;
             shareData.setCode($scope.code);
 
@@ -72,10 +74,12 @@ angular.module('executor-ui.controllers').
                     shareData.setErrorStatus(false);
                     shareData.setOutput(response.data.output);
                 }
+                $scope.loading.show = false;
                 $location.path('/output');
             }, function(response){
                 shareData.setErrorStatus(true);
                 shareData.setOutput('Error occured while communuicating with server');
+                $scope.loading.show = false;
                 $location.path('/output');
             });
         };
@@ -85,6 +89,8 @@ angular.module('executor-ui.controllers').
 
         $scope.code = shareData.getCode();
         $scope.editor = null;
+
+        $scope.loading = {show: false, text: null};
     }
 ]).
 controller('outputCtrl', ['$scope', 'shareData',
