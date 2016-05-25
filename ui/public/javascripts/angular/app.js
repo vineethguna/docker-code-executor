@@ -1,4 +1,4 @@
-angular.module('executor-ui', ['ngRoute', 'ui.codemirror', 'executor-ui.controllers'])
+angular.module('executor-ui', ['ngRoute', 'ui.codemirror', 'executor-ui.controllers', 'executor-ui.directives'])
     .config(['$routeProvider',
         function($routeProvider){
             $routeProvider.
@@ -22,3 +22,6 @@ angular.module('executor-ui.controllers', ['executor-ui.services']);
 
 //services
 angular.module('executor-ui.services', []);
+
+//directives
+angular.module('executor-ui.directives', []);
