@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: executor-ui
+spec:
+  replicas: 2
+  selector:
+    app: executor-ui
+  template:
+    metadata:
+      name: executor-ui
+      labels:
+        app: executor-ui
+    spec:
+      containers:
+      - name: executor-ui
+        image: vineethguna/executor-ui:2.1.0
+        resources:
+          requests:
+            memory: "96Mi"
+            cpu: "100m"
+          limits:
+            memory: "150Mi"
+            cpu: "200m"
+        ports:
+        - containerPort: 8080
