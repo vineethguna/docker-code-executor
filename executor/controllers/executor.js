@@ -38,11 +38,38 @@ executor.prototype.chooseExecutor = function(){
     }
 };
 
+function createFileAndWrite(data, fileOptions, asyncCallback){
+    tmp.file(fileOptions,
+    function(err, path, fd, cleanup){
+        if (err) {
+            asyncCallback(err);
+            return;
+        }
+        fs.write(fd, data, function(err){
+            if (err){
+                asyncCallback(err);
+                return;
+            }
+            fs.close(fd, function(err){
+                if (err){
+                    asyncCallback(err);
+                } else{
+                    asyncCallback(null, {path: path, cleanup: cleanup});
+                }
+            });
+        });
+    });
+}
 
-executor.prototype.execute = function(code, callback){
+executor.prototype.execute = function(code, input, callback){
     if(code == undefined || !_.isString(code)){
         throw Error('Code parameter is not a string');
     }
+
+    if(input && !_.isString(input)){
+        throw Error('Input parameter is not a string');
+    }
+
     if(!_.isFunction(callback)){
         throw Error('The callback passed is not a function');
     }
@@ -53,48 +80,44 @@ executor.prototype.execute = function(code, callback){
         var self = this;
         async.waterfall([
             function(asyncCallback){
-                tmp.file({keep: true, dir: config.tmpDir,
-                    postfix: executorMapper[self.language]['extension']}, function(err, path, fd, cleanup){
-                    if(err){
-                        asyncCallback(err);
-                    } else {
-                        asyncCallback(null, {fd: fd, path: path, cleanup: cleanup});
+                async.parallel({
+                    codeFileDetails: function(callback){
+                        var fileOptions = {keep: true, dir: config.tmpDir,
+                            postfix: executorMapper[self.language]['extension']};
+                        createFileAndWrite(code, fileOptions, callback);
+                    },
+                    inputFileDetails: function(callback){
+                        if (input){
+                            createFileAndWrite(input, {keep: true, dir: config.tmpDir}, callback);
+                            return;
+                        }
+                        callback(null, null);
                     }
-                })
-            },
-
-            function(fileDetails, asyncCallback){
-                fs.write(fileDetails.fd, code, function(err){
-                    if(err){
+                }, function(err, files) {
+                    if (err){
                         asyncCallback(err);
-                    } else {
-                        asyncCallback(null, fileDetails);
+                        return;
                     }
-                })
-            },
-
-            function(fileDetails, asyncCallback){
-                fs.close(fileDetails.fd, function(err){
-                    if(err){
-                        asyncCallback(err);
-                    } else {
-                        asyncCallback(null, fileDetails);
-                    }
+                    asyncCallback(null, files);
                 });
             },
-
-            function(fileDetails, asyncCallback){
-                executorObj.execute(fileDetails.path, function(err, stderr, stdout){
+            function(files, asyncCallback){
+                var inputPath = files.inputFileDetails == undefined ? null : files.inputFileDetails.path;
+                executorObj.execute(files.codeFileDetails.path, inputPath,
+                function(err, stderr, stdout){
                     if(err){
                         if(err.signal == 'SIGTERM'){
                             err = new Error('Timeout Exceeded');
                         }
-                        err.message = stripFilePathFromMessage(fileDetails.path, err.message);
+                        err.message = stripFilePathFromMessage(files.codeFileDetails.path, err.message);
                     }
-                    stderr = stripFilePathFromMessage(fileDetails.path, stderr);
-                    stdout = stripFilePathFromMessage(fileDetails.path, stdout);
+                    stderr = stripFilePathFromMessage(files.codeFileDetails.path, stderr);
+                    stdout = stripFilePathFromMessage(files.codeFileDetails.path, stdout);
                     asyncCallback(err, stderr, stdout);
-                    fileDetails.cleanup();
+                    files.codeFileDetails.cleanup();
+                    if(files.inputFileDetails != undefined){
+                        files.inputFileDetails.cleanup();
+                    }
                 });
             }
         ], function(err, stderr, stdout){
