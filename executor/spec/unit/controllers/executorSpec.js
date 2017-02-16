@@ -70,7 +70,7 @@ describe('controllers/executor.js', function(){
                 spyOn(executorObjInValid, 'chooseExecutor').and.callThrough();
                 validCallback = jasmine.createSpy('validCallback');
             });
-            
+
             it('should throw error if code parameter is undefined', function(){
                 expect(function(){executorObjValid.execute()}).toThrowError(Error, 'Code parameter is not a string');
                 expect(function(){executorObjValid.execute(1)}).toThrowError(Error, 'Code parameter is not a string');
@@ -79,22 +79,33 @@ describe('controllers/executor.js', function(){
                 expect(function(){executorObjValid.execute({})}).toThrowError(Error, 'Code parameter is not a string');
             });
 
-            it('should throw error if callback is not a function', function(){
+            it('should throw error if input parameter is not a string', function(){
                 expect(function(){executorObjValid.execute('sample', 1)}).toThrowError(Error,
+                    'Input parameter is not a string');
+                expect(function(){executorObjValid.execute('sample', function(){})}).toThrowError(Error,
+                    'Input parameter is not a string');
+            });
+
+            it('should throw error if callback is not a function', function(){
+                expect(function(){executorObjValid.execute('sample', 'sample', 1)}).toThrowError(Error,
                     'The callback passed is not a function');
-                expect(function(){executorObjValid.execute('sample', 'sample')}).toThrowError(Error,
+                expect(function(){executorObjValid.execute('sample', 'sample', 'sample')}).toThrowError(Error,
                     'The callback passed is not a function');
-                expect(function(){executorObjValid.execute('sample', {})}).toThrowError(Error,
+                expect(function(){executorObjValid.execute('sample', 'sample', {})}).toThrowError(Error,
                     'The callback passed is not a function');
             });
 
             it('should call chooseExecutor function', function(){
-                executorObjValid.execute('sample', validCallback);
+                executorObjValid.execute('sample', null, validCallback);
+                expect(executorObjValid.chooseExecutor).toHaveBeenCalled();
+                executorObjValid.execute('sample', 'sample', validCallback);
+                expect(executorObjValid.chooseExecutor).toHaveBeenCalled();
+                executorObjValid.execute('sample', undefined, validCallback);
                 expect(executorObjValid.chooseExecutor).toHaveBeenCalled();
             });
 
             it('should call callback with error if the language is not supported', function(){
-                executorObjInValid.execute('sample', validCallback);
+                executorObjInValid.execute('sample', 'sample', validCallback);
                 expect(validCallback).toHaveBeenCalled();
                 expect(validCallback.calls.argsFor(0)).toEqual([Error('Language is undefined or not valid')]);
             });
