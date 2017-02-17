@@ -10,12 +10,13 @@ module.exports = {
             }
 
             var language = req.body.language;
-            var code = decodeURIComponent(req.body.code);
-            
+            var code = req.body.code;
+            var input = req.body.stdin;
+
             //TODO: Unit tests should be written for the below
             try {
                 var executorObj = new executor(language);
-                executorObj.execute(code, function(err, stderr, stdout){
+                executorObj.execute(code, input, function(err, stderr, stdout){
                     if(err) {
                         res.status(200).json({
                             error: true,

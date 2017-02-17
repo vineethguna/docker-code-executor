@@ -48,6 +48,15 @@ var executeCommandsInSeries = function(commands, callback){
     series(commands, callback);
 };
 
+function addInputRedirectionToCommand(command, inputFilePath){
+    if (inputFilePath){
+        return command + ' < ' + inputFilePath + ' ';
+    } else{
+        return command;
+    }
+}
+
+
 var stripFilePathFromMessage = function(filePath, message){
     if(filePath && message){
         return message.replace(new RegExp(filePath, 'g'), '');
@@ -58,5 +67,6 @@ var stripFilePathFromMessage = function(filePath, message){
 module.exports = {
     isCommandInPath: isCommandInPath,
     executeCommandsInSeries: executeCommandsInSeries,
-    stripFilePathFromMessage: stripFilePathFromMessage
+    stripFilePathFromMessage: stripFilePathFromMessage,
+    addInputRedirectionToCommand: addInputRedirectionToCommand
 };
